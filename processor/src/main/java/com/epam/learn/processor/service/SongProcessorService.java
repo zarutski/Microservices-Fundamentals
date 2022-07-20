@@ -1,7 +1,6 @@
 package com.epam.learn.processor.service;
 
 import com.epam.learn.processor.dto.SongDTO;
-import lombok.SneakyThrows;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
@@ -25,10 +24,9 @@ public class SongProcessorService implements ProcessorService {
     private static final String LENGTH_KEY = "xmpDM:duration";
     private static final String YEAR_KEY = "xmpDM:releaseDate";
 
-    @SneakyThrows
     @Override
-    public SongDTO processFile(MultipartFile multipartFile, Integer id) {
-        Metadata metadata = extractSongMeta(multipartFile.getInputStream());
+    public SongDTO processFile(MultipartFile file, Integer id) {
+        Metadata metadata = extractSongMeta(file);
         return populateSongMeta(metadata, id);
     }
 
@@ -47,15 +45,17 @@ public class SongProcessorService implements ProcessorService {
         return songDTO;
     }
 
-    private Metadata extractSongMeta(InputStream inputStream)
-            throws TikaException, IOException, SAXException {
+    private Metadata extractSongMeta(MultipartFile file) {
         ContentHandler handler = new DefaultHandler();
         Metadata metadata = new Metadata();
         Parser parser = new Mp3Parser();
         ParseContext parseContext = new ParseContext();
-        parser.parse(inputStream, handler, metadata, parseContext);
 
-        inputStream.close();
+        try (InputStream inputStream = file.getInputStream()) {
+            parser.parse(inputStream, handler, metadata, parseContext);
+        } catch (IOException | SAXException | TikaException ex) {
+            throw new RuntimeException("Error parsing song's data", ex);
+        }
         return metadata;
     }
 }

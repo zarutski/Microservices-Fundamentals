@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class SongLengthSerializer extends JsonSerializer<Long> {
 
-    private static final String SONG_LENGTH_FORMAT = "%02d:%02d";
+    private final String SONG_LENGTH_FORMAT = "%02d:%02d";
 
     @Override
     public void serialize(Long length, JsonGenerator jsonGenerator,
