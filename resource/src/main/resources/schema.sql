@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS resource_locations (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  location VARCHAR(100) NOT NULL
+);
