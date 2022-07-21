@@ -2,6 +2,8 @@ package com.epam.learn.resource.service;
 
 import com.epam.learn.resource.domain.ResourceLocation;
 import org.apache.tika.Tika;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,18 +21,27 @@ public class S3ResourceService implements ResourceService {
 
     private final FileService fileService;
 
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    @Value("${kafka.topic-upload}")
+    private String topicUpload;
+
     public S3ResourceService(
             LocationService locationService,
-            FileService fileService) {
+            FileService fileService,
+            KafkaTemplate<String, String> kafkaTemplate) {
         this.locationService = locationService;
         this.fileService = fileService;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
     public ResourceLocation upload(MultipartFile multipartFile) throws IOException {
         verifyFileType(multipartFile);
         fileService.saveObject(multipartFile);
-        return locationService.save(multipartFile.getOriginalFilename());
+        ResourceLocation location = locationService.save(multipartFile.getOriginalFilename());
+        kafkaTemplate.send(topicUpload, location.getId().toString());
+        return location;
     }
 
     @Override

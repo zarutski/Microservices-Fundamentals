@@ -4,11 +4,9 @@ import com.epam.learn.processor.dto.SongDTO;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.mp3.Mp3Parser;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -24,9 +22,15 @@ public class SongProcessorService implements ProcessorService {
     private static final String LENGTH_KEY = "xmpDM:duration";
     private static final String YEAR_KEY = "xmpDM:releaseDate";
 
+    private final Mp3Parser parser;
+
+    public SongProcessorService(Mp3Parser parser) {
+        this.parser = parser;
+    }
+
     @Override
-    public SongDTO processFile(MultipartFile file, Integer id) {
-        Metadata metadata = extractSongMeta(file);
+    public SongDTO processFile(ByteArrayResource byteArrayResource, Integer id) {
+        Metadata metadata = extractSongMeta(byteArrayResource);
         return populateSongMeta(metadata, id);
     }
 
@@ -45,14 +49,10 @@ public class SongProcessorService implements ProcessorService {
         return songDTO;
     }
 
-    private Metadata extractSongMeta(MultipartFile file) {
-        ContentHandler handler = new DefaultHandler();
+    private Metadata extractSongMeta(ByteArrayResource resource) {
         Metadata metadata = new Metadata();
-        Parser parser = new Mp3Parser();
-        ParseContext parseContext = new ParseContext();
-
-        try (InputStream inputStream = file.getInputStream()) {
-            parser.parse(inputStream, handler, metadata, parseContext);
+        try (InputStream inputStream = resource.getInputStream()) {
+            parser.parse(inputStream, new DefaultHandler(), metadata, new ParseContext());
         } catch (IOException | SAXException | TikaException ex) {
             throw new RuntimeException("Error parsing song's data", ex);
         }

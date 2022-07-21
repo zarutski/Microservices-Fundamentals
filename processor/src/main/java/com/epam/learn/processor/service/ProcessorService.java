@@ -1,9 +1,9 @@
 package com.epam.learn.processor.service;
 
 import com.epam.learn.processor.dto.SongDTO;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.ByteArrayResource;
 
 public interface ProcessorService {
 
-    SongDTO processFile(MultipartFile multipartFile, Integer id);
+    SongDTO processFile(ByteArrayResource byteArrayResource, Integer id);
 }
