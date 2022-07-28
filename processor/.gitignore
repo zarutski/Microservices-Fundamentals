@@ -14,3 +14,4 @@ mvnw.cmd
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+/build/test-results/**/

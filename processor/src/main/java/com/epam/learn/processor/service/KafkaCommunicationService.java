@@ -1,7 +1,7 @@
 package com.epam.learn.processor.service;
 
 import com.epam.learn.processor.dto.SongDTO;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ public class KafkaCommunicationService implements CommunicationService {
 
     @Override
     public void processMessageReceived(Integer resourceId) {
-        ByteArrayResource resource = resourceService.getById(resourceId);
+        Resource resource = resourceService.getById(resourceId);
         SongDTO songDTO = retryTemplate.execute(retryContext ->
                 processorService.processFile(resource, resourceId));
         retryTemplate.execute(retryContext -> songService.saveSongData(songDTO));

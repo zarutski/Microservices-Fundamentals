@@ -1,7 +1,7 @@
 package com.epam.learn.processor.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ResourceService {
 
     @GetMapping("/resources/{id}")
-    ByteArrayResource getById(@PathVariable(value = "id") Integer resourceId);
+    Resource getById(@PathVariable(value = "id") Integer resourceId);
 }

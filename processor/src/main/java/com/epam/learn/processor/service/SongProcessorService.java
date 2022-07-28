@@ -5,7 +5,7 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.mp3.Mp3Parser;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -29,8 +29,8 @@ public class SongProcessorService implements ProcessorService {
     }
 
     @Override
-    public SongDTO processFile(ByteArrayResource byteArrayResource, Integer id) {
-        Metadata metadata = extractSongMeta(byteArrayResource);
+    public SongDTO processFile(Resource resource, Integer id) {
+        Metadata metadata = extractSongMeta(resource);
         return populateSongMeta(metadata, id);
     }
 
@@ -49,7 +49,7 @@ public class SongProcessorService implements ProcessorService {
         return songDTO;
     }
 
-    private Metadata extractSongMeta(ByteArrayResource resource) {
+    private Metadata extractSongMeta(Resource resource) {
         Metadata metadata = new Metadata();
         try (InputStream inputStream = resource.getInputStream()) {
             parser.parse(inputStream, new DefaultHandler(), metadata, new ParseContext());
