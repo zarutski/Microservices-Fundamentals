@@ -1,0 +1,1 @@
+insert into songs (name, artist, album, length, resource_id, release_year) values ('Uptight', 'Green Day', 'Nimrod', 184, 1, 1997), ('My Blood', 'Twenty One Pilots', 'Trench', 208, 2, 2018)
