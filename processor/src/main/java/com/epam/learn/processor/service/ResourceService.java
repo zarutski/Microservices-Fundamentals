@@ -5,7 +5,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "resource-service", url = "${resource-service-app.url}")
+@FeignClient(name = "resource-service")
 public interface ResourceService {
 
     @GetMapping("/resources/{id}")

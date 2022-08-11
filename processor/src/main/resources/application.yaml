@@ -1,0 +1,25 @@
+server:
+  port: 8092
+
+spring:
+  application:
+    name: processor-service
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  kafka:
+    bootstrap-servers: http://${SERVICE_TO_KAFKA_CONNECTION}:${SERVICE_TO_KAFKA_PORT}
+
+kafka:
+  consumer:
+    group-id: songsapp
+  topic-upload: resource-upload
+retry:
+  backoff-period: 2000
+  max-attempts: 5
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}

@@ -22,12 +22,11 @@ services:
     image: resource
     container_name: resource-service-application
     build: resource/
-    ports:
-      - "8091:8091"
     depends_on:
       - kafka
       - localstack
       - db-postgres
+      - eureka
     environment:
       KAFKA_DOCKER_SERVICE: ${KAFKA_DOCKER_SERVICE}
       LOCALSTACK_SERVICE: ${LOCALSTACK_SERVICE}
@@ -35,34 +34,33 @@ services:
       SERVICE_TO_KAFKA_PORT: ${SERVICE_TO_KAFKA_PORT}
       DB_SERVICE: ${DB_SERVICE}
       DB_PORT: ${DB_PORT}
+      EUREKA_URL: ${EUREKA_URL}
   processor:
     image: processor
     container_name: processor-service-application
     build: processor/
-    ports:
-      - "8092:8092"
     depends_on:
       - kafka
       - localstack
+      - eureka
     environment:
       KAFKA_DOCKER_SERVICE: ${KAFKA_DOCKER_SERVICE}
-      RESOURCE_SERVICE_HOST: ${RESOURCE_SERVICE_HOST}
-      SONG_SERVICE_HOST: ${SONG_SERVICE_HOST}
       SERVICE_TO_KAFKA_CONNECTION: ${SERVICE_TO_KAFKA_CONNECTION}
       SERVICE_TO_KAFKA_PORT: ${SERVICE_TO_KAFKA_PORT}
+      EUREKA_URL: ${EUREKA_URL}
   song:
     image: song
     container_name: song-service-application
     build: song/
-    ports:
-      - "8093:8093"
     depends_on:
       - kafka
       - localstack
       - db-postgres
+      - eureka
     environment:
       DB_SERVICE: ${DB_SERVICE}
       DB_PORT: ${DB_PORT}
+      EUREKA_URL: ${EUREKA_URL}
   db-postgres:
     image: postgres
     container_name: db-postgres-container
@@ -82,3 +80,19 @@ services:
     environment:
       SERVICES: ${LOCALSTACK_SERVICES}
       DOCKER_HOST: ${LOCALSTACK_DOCKER_HOST}
+  eureka:
+    image: msf/eureka
+    container_name: eureka-service
+    build: eureka/
+    ports:
+      - "8761:8761"
+  gateway:
+    container_name: gateway-service
+    image: msf/gateway
+    build: gateway/
+    environment:
+      EUREKA_URL: ${EUREKA_URL}
+    ports:
+      - '8080:8080'
+    depends_on:
+      - eureka
