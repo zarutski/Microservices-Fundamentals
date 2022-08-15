@@ -1,0 +1,6 @@
+spring:
+  jpa:
+    database: h2
+    hibernate:
+      ddl-auto: none
+      dialect: org.hibernate.dialect.H2Dialect

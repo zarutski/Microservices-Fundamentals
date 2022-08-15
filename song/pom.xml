@@ -17,6 +17,7 @@
 		<java.version>17</java.version>
 		<cucumber.version>7.4.1</cucumber.version>
 		<postgresql.version>42.4.0</postgresql.version>
+		<eureka.version>3.1.3</eureka.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -68,6 +69,11 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>${eureka.version}</version>
 		</dependency>
 	</dependencies>
 

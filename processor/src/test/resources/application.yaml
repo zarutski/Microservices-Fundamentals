@@ -1,0 +1,11 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_DOCKER_SERVICE:localhost}:9093
+
+kafka:
+  consumer:
+    group-id: songsapp
+  topic-upload: resource-upload
+retry:
+  backoff-period: 2000
+  max-attempts: 3

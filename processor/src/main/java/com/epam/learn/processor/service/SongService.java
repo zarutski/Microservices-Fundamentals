@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(value = "song-service", url = "${song-service-app.url}")
+@FeignClient(name = "song-service")
 public interface SongService {
 
     @PostMapping("/songs")
