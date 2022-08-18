@@ -36,10 +36,20 @@ aws:
 
 kafka:
   consumer:
-    group-id: songsapp
+    group-id: song.proceeded
   topic-upload: resource-upload
+  topic-proceeded: resource-proceeded
 
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      storageBreaker:
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        waitDurationInOpenState: 20s
+        slidingWindowType: COUNT_BASED

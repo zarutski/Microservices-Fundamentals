@@ -23,30 +23,35 @@ public class S3ResourceService implements ResourceService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
+    private final StorageService storageService;
+
     @Value("${kafka.topic-upload}")
     private String topicUpload;
 
     public S3ResourceService(
             LocationService locationService,
             FileService fileService,
-            KafkaTemplate<String, String> kafkaTemplate) {
+            KafkaTemplate<String, String> kafkaTemplate,
+            StorageService storageService) {
         this.locationService = locationService;
         this.fileService = fileService;
         this.kafkaTemplate = kafkaTemplate;
+        this.storageService = storageService;
     }
 
     @Override
     public ResourceLocation upload(MultipartFile multipartFile) throws IOException {
         verifyFileType(multipartFile);
         fileService.saveObject(multipartFile);
-        ResourceLocation location = locationService.save(multipartFile.getOriginalFilename());
+        String filename = multipartFile.getOriginalFilename();
+        ResourceLocation location = locationService.saveToStaging(filename);
         kafkaTemplate.send(topicUpload, location.getId().toString());
         return location;
     }
 
     @Override
     public InputStream download(Integer id) {
-        ResourceLocation resourceLocation = locationService.verify(id);
+        ResourceLocation resourceLocation = locationService.getExisting(id);
         String location = resourceLocation.getLocation();
         return fileService.getObject(location);
     }

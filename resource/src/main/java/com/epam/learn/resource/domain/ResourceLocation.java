@@ -22,5 +22,7 @@ public class ResourceLocation {
     @Column
     @JsonIgnore
     private String location;
+    @Column
+    private Integer storageId;
 
 }

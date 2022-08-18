@@ -61,6 +61,17 @@ services:
       DB_SERVICE: ${DB_SERVICE}
       DB_PORT: ${DB_PORT}
       EUREKA_URL: ${EUREKA_URL}
+  storage:
+    image: storage
+    container_name: storage-service-application
+    build: storage/
+    depends_on:
+      - db-postgres
+      - eureka
+    environment:
+      DB_SERVICE: ${DB_SERVICE}
+      DB_PORT: ${DB_PORT}
+      EUREKA_URL: ${EUREKA_URL}
   db-postgres:
     image: postgres
     container_name: db-postgres-container

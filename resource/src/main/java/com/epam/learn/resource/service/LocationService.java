@@ -5,11 +5,13 @@ import com.epam.learn.resource.domain.ResourceLocation;
 import java.util.List;
 
 public interface LocationService {
-    ResourceLocation save(String location);
+    ResourceLocation saveToStaging(String location);
 
     List<Integer> deleteByIds(List<Integer> ids);
 
-    ResourceLocation verify(Integer id);
+    ResourceLocation getExisting(Integer id);
+
+    void moveToPermanent(ResourceLocation location);
 
     List<ResourceLocation> findAllByIds(List<Integer> ids);
 }
