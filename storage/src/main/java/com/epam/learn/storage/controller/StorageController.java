@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Size;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Validated
@@ -33,9 +31,8 @@ public class StorageController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Integer> createStorage(@RequestBody Storage storage) {
-        Storage created = storageService.create(storage);
-        return Collections.singletonMap("id", created.getId());
+    public Storage createStorage(@RequestBody Storage storage) {
+        return storageService.create(storage);
     }
 
     @GetMapping("/{id}")
@@ -50,7 +47,7 @@ public class StorageController {
     }
 
     @DeleteMapping
-    public Map<String, List<Integer>> delete(@RequestParam @Size(min = 1, max = 200) List<Integer> id) {
-        return Collections.singletonMap("ids", storageService.deleteByIds(id));
+    public List<Integer> delete(@RequestParam @Size(min = 1, max = 200) List<Integer> id) {
+        return storageService.deleteByIds(id);
     }
 }

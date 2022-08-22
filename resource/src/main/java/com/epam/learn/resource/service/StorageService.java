@@ -20,7 +20,7 @@ public class StorageService {
         this.serviceClient = serviceClient;
     }
 
-    @CircuitBreaker(name = "storageBreaker", fallbackMethod = "getStorageStub")
+    @CircuitBreaker(name = "storageBreaker", fallbackMethod = "getStorageByTypeStub")
     public Storage getStorageByType(StorageType type) {
         List<Storage> storages = serviceClient.getAll();
         Collections.shuffle(storages);
@@ -30,7 +30,7 @@ public class StorageService {
                 .orElseThrow(() -> new NoSuchElementException("No storage found with type: " + type));
     }
 
-    public Storage getStorageStub(StorageType type, Exception exception) {
+    public Storage getStorageByTypeStub(StorageType type, Exception exception) {
         log.error("[Calling fallback] Exception while storage fetching: " + exception);
         Storage storage = new Storage();
         storage.setStorageType(type);

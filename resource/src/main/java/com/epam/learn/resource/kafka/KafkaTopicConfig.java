@@ -1,19 +1,19 @@
 package com.epam.learn.resource.kafka;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
+@RequiredArgsConstructor
 public class KafkaTopicConfig {
 
-    @Value("${kafka.topic-upload}")
-    private String topicUpload;
+    private final KafkaTopicsProperties topicsProperties;
 
     @Bean
     public NewTopic resourceUpload(){
-        return TopicBuilder.name(topicUpload).build();
+        return TopicBuilder.name(topicsProperties.getUpload()).build();
     }
 }

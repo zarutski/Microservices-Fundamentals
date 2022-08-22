@@ -1,8 +1,9 @@
 package com.epam.learn.resource.service;
 
 import com.epam.learn.resource.domain.ResourceLocation;
+import com.epam.learn.resource.kafka.KafkaTopicsProperties;
+import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class S3ResourceService implements ResourceService {
 
     private final LocationService locationService;
@@ -23,21 +25,7 @@ public class S3ResourceService implements ResourceService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    private final StorageService storageService;
-
-    @Value("${kafka.topic-upload}")
-    private String topicUpload;
-
-    public S3ResourceService(
-            LocationService locationService,
-            FileService fileService,
-            KafkaTemplate<String, String> kafkaTemplate,
-            StorageService storageService) {
-        this.locationService = locationService;
-        this.fileService = fileService;
-        this.kafkaTemplate = kafkaTemplate;
-        this.storageService = storageService;
-    }
+    private final KafkaTopicsProperties topicsProperties;
 
     @Override
     public ResourceLocation upload(MultipartFile multipartFile) throws IOException {
@@ -45,7 +33,7 @@ public class S3ResourceService implements ResourceService {
         fileService.saveObject(multipartFile);
         String filename = multipartFile.getOriginalFilename();
         ResourceLocation location = locationService.saveToStaging(filename);
-        kafkaTemplate.send(topicUpload, location.getId().toString());
+        kafkaTemplate.send(topicsProperties.getUpload(), location.getId().toString());
         return location;
     }
 

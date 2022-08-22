@@ -37,8 +37,9 @@ aws:
 kafka:
   consumer:
     group-id: song.proceeded
-  topic-upload: resource-upload
-  topic-proceeded: resource-proceeded
+  topics:
+    upload: resource-upload
+    processed: resource-processed
 
 eureka:
   client:

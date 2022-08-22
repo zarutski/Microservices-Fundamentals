@@ -15,7 +15,7 @@ public class KafkaConsumerListener {
         this.communicationService = communicationService;
     }
 
-    @KafkaListener(topics = "${kafka.topic-upload}", groupId = "${kafka.consumer.group-id}")
+    @KafkaListener(topics = "${kafka.topics.upload}", groupId = "${kafka.consumer.group-id}")
     void consumerTopicListener(String message) {
         log.info("Topic listener. Message received: {}", message);
         Integer resourceId = Integer.parseInt(message);
