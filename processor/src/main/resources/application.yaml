@@ -14,7 +14,9 @@ spring:
 kafka:
   consumer:
     group-id: songsapp
-  topic-upload: resource-upload
+  topics:
+    upload: resource-upload
+    processed: resource-processed
 retry:
   backoff-period: 2000
   max-attempts: 5

@@ -20,7 +20,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: ${KAFKA_ZOOKEEPER_CONNECT}
   resource:
     image: resource
-    container_name: resource-service-application
+    container_name: resource-service
     build: resource/
     depends_on:
       - kafka
@@ -37,7 +37,7 @@ services:
       EUREKA_URL: ${EUREKA_URL}
   processor:
     image: processor
-    container_name: processor-service-application
+    container_name: processor-service
     build: processor/
     depends_on:
       - kafka
@@ -50,11 +50,22 @@ services:
       EUREKA_URL: ${EUREKA_URL}
   song:
     image: song
-    container_name: song-service-application
+    container_name: song-service
     build: song/
     depends_on:
       - kafka
       - localstack
+      - db-postgres
+      - eureka
+    environment:
+      DB_SERVICE: ${DB_SERVICE}
+      DB_PORT: ${DB_PORT}
+      EUREKA_URL: ${EUREKA_URL}
+  storage:
+    image: storage
+    container_name: storage-service
+    build: storage/
+    depends_on:
       - db-postgres
       - eureka
     environment:

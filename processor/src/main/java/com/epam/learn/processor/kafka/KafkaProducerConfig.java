@@ -1,4 +1,4 @@
-package com.epam.learn.resource.kafka;
+package com.epam.learn.processor.kafka;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;

@@ -29,5 +29,7 @@ aws:
 
 kafka:
   consumer:
-    group-id: songsapp
-  topic-upload: resource-upload
+    group-id: song.proceeded
+  topics:
+    upload: resource-upload
+    processed: resource-processed

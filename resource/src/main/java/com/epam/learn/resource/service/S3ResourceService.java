@@ -1,8 +1,9 @@
 package com.epam.learn.resource.service;
 
 import com.epam.learn.resource.domain.ResourceLocation;
+import com.epam.learn.resource.kafka.KafkaTopicsProperties;
+import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class S3ResourceService implements ResourceService {
 
     private final LocationService locationService;
@@ -23,30 +25,21 @@ public class S3ResourceService implements ResourceService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value("${kafka.topic-upload}")
-    private String topicUpload;
-
-    public S3ResourceService(
-            LocationService locationService,
-            FileService fileService,
-            KafkaTemplate<String, String> kafkaTemplate) {
-        this.locationService = locationService;
-        this.fileService = fileService;
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    private final KafkaTopicsProperties topicsProperties;
 
     @Override
     public ResourceLocation upload(MultipartFile multipartFile) throws IOException {
         verifyFileType(multipartFile);
         fileService.saveObject(multipartFile);
-        ResourceLocation location = locationService.save(multipartFile.getOriginalFilename());
-        kafkaTemplate.send(topicUpload, location.getId().toString());
+        String filename = multipartFile.getOriginalFilename();
+        ResourceLocation location = locationService.saveToStaging(filename);
+        kafkaTemplate.send(topicsProperties.getUpload(), location.getId().toString());
         return location;
     }
 
     @Override
     public InputStream download(Integer id) {
-        ResourceLocation resourceLocation = locationService.verify(id);
+        ResourceLocation resourceLocation = locationService.getExisting(id);
         String location = resourceLocation.getLocation();
         return fileService.getObject(location);
     }

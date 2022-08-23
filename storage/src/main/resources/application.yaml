@@ -1,0 +1,20 @@
+server:
+  port: 8094
+
+spring:
+  application:
+    name: storage-service
+  datasource:
+    url: jdbc:postgresql://${DB_SERVICE:localhost}:${DB_PORT:5342}/storagedb
+    username: root
+    password: 1234
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}

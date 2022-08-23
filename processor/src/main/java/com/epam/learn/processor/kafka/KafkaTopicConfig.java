@@ -1,4 +1,4 @@
-package com.epam.learn.resource.kafka;
+package com.epam.learn.processor.kafka;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -13,7 +13,7 @@ public class KafkaTopicConfig {
     private final KafkaTopicsProperties topicsProperties;
 
     @Bean
-    public NewTopic resourceUpload(){
-        return TopicBuilder.name(topicsProperties.getUpload()).build();
+    public NewTopic resourceProcessed(){
+        return TopicBuilder.name(topicsProperties.getProcessed()).build();
     }
 }
