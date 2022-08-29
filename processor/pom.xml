@@ -19,6 +19,8 @@
 		<cucumber.version>7.4.1</cucumber.version>
 		<spring.cloud.version>3.1.3</spring.cloud.version>
 		<spring.retry.version>1.3.3</spring.retry.version>
+		<logstash.version>7.2</logstash.version>
+		<micrometer.version>1.9.3</micrometer.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -82,6 +84,25 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 			<version>${spring.cloud.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>${logstash.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+			<version>${spring.cloud.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-elastic</artifactId>
+			<version>${micrometer.version}</version>
 		</dependency>
 	</dependencies>
 
