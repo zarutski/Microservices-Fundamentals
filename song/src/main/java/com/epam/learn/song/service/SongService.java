@@ -2,12 +2,14 @@ package com.epam.learn.song.service;
 
 import com.epam.learn.song.domain.Song;
 import com.epam.learn.song.repository.SongRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional
 public class SongService {
@@ -19,6 +21,7 @@ public class SongService {
     }
 
     public Song create(Song song) {
+        log.info("Song's data input while creation: " + song);
         return songRepository.save(song);
     }
 

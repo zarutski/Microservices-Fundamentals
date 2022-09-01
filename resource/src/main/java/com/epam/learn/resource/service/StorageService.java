@@ -31,7 +31,7 @@ public class StorageService {
     }
 
     public Storage getStorageByTypeStub(StorageType type, Exception exception) {
-        log.error("[Calling fallback] Exception while storage fetching: " + exception);
+        log.warn("[Calling fallback] Exception while storage fetching: " + exception);
         Storage storage = new Storage();
         storage.setStorageType(type);
         storage.setId(type == StorageType.STAGING ? 1 : 2);

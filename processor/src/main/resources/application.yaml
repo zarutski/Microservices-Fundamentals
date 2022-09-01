@@ -25,3 +25,21 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+
+management:
+  metrics:
+    export:
+      elastic:
+        enabled: true
+        host: http://elasticsearch:9200
+        index: metrics
+        step: 5s
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
