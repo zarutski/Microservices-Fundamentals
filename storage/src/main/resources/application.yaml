@@ -13,6 +13,12 @@ spring:
     hibernate:
       ddl-auto: update
       dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URI}/realms/music-service-realm
+          jwt-set-uri: ${KEYCLOAK_URI}/realms/music-service-realm/protocol/openid-connect/certs
 
 eureka:
   client:

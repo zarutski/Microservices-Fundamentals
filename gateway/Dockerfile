@@ -1,4 +1,4 @@
 FROM openjdk:17-alpine
 ADD /target/*.jar gateway-service
-EXPOSE 8080
+EXPOSE 9990
 ENTRYPOINT ["java","-jar","/gateway-service"]
